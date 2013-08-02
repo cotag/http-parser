@@ -235,8 +235,8 @@ module Paceman
 
                 err = HttpParser.err_name(error)[4..-1] # HPE_ is at the start of all these errors
                 klass = ERRORS[err.to_sym]
-                err = "#{err}: #{HttpParser.err_desc(error)}"
-                return if klass.nil? ? Error::UNKNOWN.new(err) : klass.new(err)
+                err = "#{HttpParser.err_desc(error)} (#{err})"
+                return klass.nil? ? Error::UNKNOWN.new(err) : klass.new(err)
             end
 
             #
