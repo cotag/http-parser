@@ -1,6 +1,6 @@
 # http-parser
 
-Ruby FFI bindings to [http-parser](https://github.com/joyent/http-parser)
+Ruby FFI bindings to [http-parser](https://github.com/joyent/http-parser) [![Build Status](https://travis-ci.org/cotag/http-parser.png)](https://travis-ci.org/cotag/http-parser)
 
 ## Install
 
