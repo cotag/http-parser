@@ -1,11 +1,11 @@
-require 'paceman'
+require 'http-parser'
 
-describe Paceman::HttpParser::Instance, "#initialize" do
+describe ::HttpParser::Instance, "#initialize" do
     context "when initialized from a pointer" do
         it "should not call http_parser_init" do
             ptr = described_class.new.to_ptr
 
-            Paceman::HttpParser.should_not_receive(:http_parser_init)
+            ::HttpParser.should_not_receive(:http_parser_init)
 
             described_class.new(ptr)
         end
@@ -35,13 +35,13 @@ describe Paceman::HttpParser::Instance, "#initialize" do
         end
 
         it "should convert the type to a Symbol" do
-            subject[:type_flags] = Paceman::HttpParser::TYPES[:request]
+            subject[:type_flags] = ::HttpParser::TYPES[:request]
 
             subject.type.should == :request
         end
 
         it "should extract the type from the type_flags field" do
-            subject[:type_flags] = ((0xff & ~0x3) | Paceman::HttpParser::TYPES[:response])
+            subject[:type_flags] = ((0xff & ~0x3) | ::HttpParser::TYPES[:response])
 
             subject.type.should == :response
         end
@@ -60,7 +60,7 @@ describe Paceman::HttpParser::Instance, "#initialize" do
 
             subject.type = :request
 
-            subject[:type_flags].should == (flags | Paceman::HttpParser::TYPES[:request])
+            subject[:type_flags].should == (flags | ::HttpParser::TYPES[:request])
         end
     end
 
@@ -80,7 +80,7 @@ describe Paceman::HttpParser::Instance, "#initialize" do
         it "should call http_parser_init" do
             inst = described_class.new
 
-            Paceman::HttpParser.should_receive(:http_parser_init)
+            ::HttpParser.should_receive(:http_parser_init)
 
             inst.reset!
         end

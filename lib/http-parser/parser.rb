@@ -1,42 +1,44 @@
 
-module Paceman
+module HttpParser
     class Parser
-        include Assertions
-
-
-        def self.new_instance
-            ::Paceman::HttpParser::Instance.new
+        #
+        # Returns a new request/response instance variable
+        #
+        def self.new_instance &block
+            ::HttpParser::Instance.new &block
         end
 
 
         #
         # Initializes the Parser instance.
         #
-        # @param [Paceman::HttpParser::HttpParser] ptr
-        #   Optional pointer to an existing `http_parser` struct.
-        #
         def initialize
-            @settings = HttpParser::Settings.new
+            @settings = ::HttpParser::Settings.new
             yield self if block_given?
         end
 
         #
         # Registers an `on_message_begin` callback.
         #
-        # @yield []
+        # @yield [instance]
         #   The given block will be called when the HTTP message begins.
         #
+        # @yieldparam [Paceman::HttpParser::Instance] instance
+        #   The state so far of the request / response being processed.
+        #
         def on_message_begin(&block)
-            assert_block(block)
             @settings[:on_message_begin] = Callback.new(&block)
         end
 
         #
         # Registers an `on_url` callback.
         #
-        # @yield [url]
+        # @yield [instance, url]
         #   The given block will be called when the Request URI is recognized
         #   within the Request-Line.
+        #
+        # @yieldparam [Paceman::HttpParser::Instance] instance
+        #   The state so far of the request / response being processed.
         #
         # @yieldparam [String] url
         #   The recognized Request URI.
@@ -44,27 +46,31 @@ module Paceman
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_url(&block)
-            assert_block(block)
             @settings[:on_url] = DataCallback.new(&block)
         end
 
         #
         # Registers an `on_status_complete` callback.
         #
-        # @yield []
+        # @yield [instance]
         #   The given block will be called when the status is recognized.
         #
+        # @yieldparam [Paceman::HttpParser::Instance] instance
+        #   The state so far of the request / response being processed.
+        #
         def on_status_complete(&block)
-            assert_block(block)
             @settings[:on_status_complete] = Callback.new(&block)
         end
 
         #
         # Registers an `on_header_field` callback.
         #
-        # @yield [field]
+        # @yield [instance, field]
         #   The given block will be called when a Header name is recognized
         #   in the Headers.
+        #
+        # @yieldparam [Paceman::HttpParser::Instance] instance
+        #   The state so far of the request / response being processed.
         #
         # @yieldparam [String] field
         #   A recognized Header name.
@@ -72,16 +78,18 @@ module Paceman
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_header_field(&block)
-            assert_block(block)
             @settings[:on_header_field] = DataCallback.new(&block)
         end
 
         #
         # Registers an `on_header_value` callback.
         #
-        # @yield [value]
+        # @yield [instance, value]
         #   The given block will be called when a Header value is recognized
         #   in the Headers.
+        #
+        # @yieldparam [Paceman::HttpParser::Instance] instance
+        #   The state so far of the request / response being processed.
         #
         # @yieldparam [String] value
         #   A recognized Header value.
@@ -89,27 +97,31 @@ module Paceman
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_header_value(&block)
-            assert_block(block)
             @settings[:on_header_value] = DataCallback.new(&block)
         end
 
         #
         # Registers an `on_headers_complete` callback.
         #
-        # @yield []
+        # @yield [instance]
         #   The given block will be called when the Headers stop.
         #
+        # @yieldparam [Paceman::HttpParser::Instance] instance
+        #   The state so far of the request / response being processed.
+        #
         def on_headers_complete(&block)
-            assert_block(block)
             @settings[:on_headers_complete] = Callback.new(&block)
         end
 
         #
         # Registers an `on_body` callback.
         #
-        # @yield [body]
+        # @yield [instance, body]
         #   The given block will be called when the body is recognized in the
         #   message body.
+        #
+        # @yieldparam [Paceman::HttpParser::Instance] instance
+        #   The state so far of the request / response being processed.
         #
         # @yieldparam [String] body
         #   The full body or a chunk of the body from a chunked
@@ -118,33 +130,36 @@ module Paceman
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_body(&block)
-            assert_block(block)
             @settings[:on_body] = DataCallback.new(&block)
         end
 
         #
         # Registers an `on_message_begin` callback.
         #
-        # @yield []
+        # @yield [instance]
         #   The given block will be called when the message completes.
         #
+        # @yieldparam [Paceman::HttpParser::Instance] instance
+        #   The state so far of the request / response being processed.
+        #
         def on_message_complete(&block)
-            assert_block(block)
             @settings[:on_message_complete] = Callback.new(&block)
         end
 
         #
         # Parses data.
         #
-        # @param [String] data
-        #   The data to parse.
+        # @param [Paceman::HttpParser::Instance] inst
+        #   The state so far of the request / response being processed.
         #
-        # @return [Integer]
-        #   The number of bytes parsed. `0` will be returned if the parser
-        #   encountered an error.
+        # @param [String] data
+        #   The data to parse against the instance specified.
+        #
+        # @return [Boolean]
+        #   Returns true if the data was parsed successfully.
         #
         def parse(inst, data)
-            HttpParser.http_parser_execute(inst, @settings, data, data.length)
+            ::HttpParser.http_parser_execute(inst, @settings, data, data.length)
             return !inst.error?
         end
 
@@ -158,7 +173,11 @@ module Paceman
             #
             def self.new(&block)
                 super do |parser|
-                    catch(:return) { yield(parser); 0 }
+                    begin
+                        catch(:return) { yield(parser); 0 }
+                    rescue
+                        -1
+                    end
                 end
             end
         end
@@ -166,8 +185,12 @@ module Paceman
         class DataCallback < Proc
             def self.new(&block)
                 super do |parser, buffer, length|
-                    data = buffer.get_bytes(0, length)
-                    catch(:return) { yield(parser, data); 0 }
+                    begin
+                        data = buffer.get_bytes(0, length)
+                        catch(:return) { yield(parser, data); 0 }
+                    rescue
+                        -1
+                    end
                 end
             end
         end

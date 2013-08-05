@@ -1,8 +1,8 @@
-require 'paceman'
+require 'http-parser'
 
-describe Paceman::Parser, "#initialize" do
+describe HttpParser::Parser, "#initialize" do
     before :each do
-        @inst = Paceman::Parser.new_instance
+        @inst = HttpParser::Parser.new_instance
     end
 
     describe "callbacks" do
