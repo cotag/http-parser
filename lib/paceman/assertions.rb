@@ -1,4 +1,4 @@
-module UV
+module Paceman
   module Assertions
     def assert_block(proc, msg = "no block given")
       raise ArgumentError, msg, caller if proc.nil?

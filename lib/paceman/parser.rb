@@ -1,6 +1,14 @@
 
 module Paceman
     class Parser
+        include Assertions
+
+
+        def self.new_instance
+            ::Paceman::HttpParser::Instance.new
+        end
+
+
         #
         # Initializes the Parser instance.
         #
@@ -20,7 +28,6 @@ module Paceman
         #
         def on_message_begin(&block)
             assert_block(block)
-            assert_arity(1, block)
             @settings[:on_message_begin] = Callback.new(&block)
         end
 
@@ -38,7 +45,6 @@ module Paceman
         #
         def on_url(&block)
             assert_block(block)
-            assert_arity(2, block)
             @settings[:on_url] = DataCallback.new(&block)
         end
 
@@ -50,7 +56,6 @@ module Paceman
         #
         def on_status_complete(&block)
             assert_block(block)
-            assert_arity(1, block)
             @settings[:on_status_complete] = Callback.new(&block)
         end
 
@@ -68,7 +73,6 @@ module Paceman
         #
         def on_header_field(&block)
             assert_block(block)
-            assert_arity(2, block)
             @settings[:on_header_field] = DataCallback.new(&block)
         end
 
@@ -86,7 +90,6 @@ module Paceman
         #
         def on_header_value(&block)
             assert_block(block)
-            assert_arity(2, block)
             @settings[:on_header_value] = DataCallback.new(&block)
         end
 
@@ -98,7 +101,6 @@ module Paceman
         #
         def on_headers_complete(&block)
             assert_block(block)
-            assert_arity(1, block)
             @settings[:on_headers_complete] = Callback.new(&block)
         end
 
@@ -117,7 +119,6 @@ module Paceman
         #
         def on_body(&block)
             assert_block(block)
-            assert_arity(2, block)
             @settings[:on_body] = DataCallback.new(&block)
         end
 
@@ -129,7 +130,6 @@ module Paceman
         #
         def on_message_complete(&block)
             assert_block(block)
-            assert_arity(1, block)
             @settings[:on_message_complete] = Callback.new(&block)
         end
 
@@ -143,9 +143,9 @@ module Paceman
         #   The number of bytes parsed. `0` will be returned if the parser
         #   encountered an error.
         #
-        def parse(parser, data)
-            HttpParser.http_parser_execute(parser, @settings, data, data.length)
-            return !parser.error?
+        def parse(inst, data)
+            HttpParser.http_parser_execute(inst, @settings, data, data.length)
+            return !inst.error?
         end
 
 
