@@ -1,0 +1,9 @@
+language: ruby
+rvm:
+  - "1.9.3"
+  - "2.0.0"
+  - rbx-19mode   # Rubinius in 1.9 mode
+  - jruby-19mode # JRuby in 1.9 mode
+  - jruby-20mode
+# uncomment this line if your project needs to run something other than `rake`:
+script: bundle exec rspec
