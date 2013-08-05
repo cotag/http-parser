@@ -7,3 +7,5 @@ rvm:
   - jruby-20mode
 # uncomment this line if your project needs to run something other than `rake`:
 script: bundle exec rspec
+before_script:
+  - cd ext && rake && cd ..
