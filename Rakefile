@@ -6,7 +6,7 @@ task :default => [:compile, :test]
 
 task :compile do
     protect = ['http_parser.c', 'http_parser.h']
-    Dir["ext/http-parser/*"].each do |file|
+    Dir["ext/http-parser/**/*"].each do |file|
         begin
             next if protect.include? File.basename(file)
             FileUtils.rm file
