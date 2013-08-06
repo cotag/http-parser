@@ -5,8 +5,5 @@ rvm:
   - rbx-19mode   # Rubinius in 1.9 mode
   - jruby-19mode # JRuby in 1.9 mode
   - jruby-20mode
-branches:
-  only:
-    - master
-before_install:
-  - git submodule update --init --recursive
+
+script: sudo -E rake
