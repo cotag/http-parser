@@ -5,7 +5,8 @@ rvm:
   - rbx-19mode   # Rubinius in 1.9 mode
   - jruby-19mode # JRuby in 1.9 mode
   - jruby-20mode
-# uncomment this line if your project needs to run something other than `rake`:
-script: bundle exec rspec
-before_script:
-  - cd ext && rake && cd ..
+branches:
+  only:
+    - master
+before_install:
+  - git submodule update --init --recursive

@@ -7,6 +7,7 @@ Gem::Specification.new do |s|
   s.version     = HttpParser::VERSION
   s.authors     = ["Stephen von Takach"]
   s.email       = ["steve@cotag.me"]
+  s.license     = 'MIT'
   s.homepage    = "https://github.com/cotag/http-parser"
   s.summary     = "Ruby bindings to joyent/http-parser"
   s.description = <<-EOF
