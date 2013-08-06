@@ -7,6 +7,6 @@ rvm:
   - jruby-20mode
 
 before_script:
-  - sudo -E bundle install
+  - sudo -E gem install ffi-compiler
   - sudo -E rake compile
 script: rake test
