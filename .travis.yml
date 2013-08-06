@@ -5,7 +5,3 @@ rvm:
   - rbx-19mode   # Rubinius in 1.9 mode
   - jruby-19mode # JRuby in 1.9 mode
   - jruby-20mode
-
-before_script:
-  - rvmsudo rake compile
-script: rake test
