@@ -6,4 +6,5 @@ rvm:
   - jruby-19mode # JRuby in 1.9 mode
   - jruby-20mode
 
-script: sudo -E rake
+before_script: sudo -E rake compile
+script: rake test
