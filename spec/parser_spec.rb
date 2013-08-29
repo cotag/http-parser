@@ -270,5 +270,19 @@ describe HttpParser::Parser, "#initialize" do
             @inst.upgrade?.should be_true
         end
     end
+
+    describe "pipelined requests" do
+        subject do
+            @begun = 0
+            described_class.new do |parser|
+                parser.on_message_begin { @begun += 1 }
+            end
+        end
+
+        it "should trigger on a new request" do
+            subject.parse @inst, "GET /demo HTTP/1.1\r\n\r\nGET /demo HTTP/1.1\r\n\r\n"
+            @begun.should == 2
+        end
+    end
 end
 

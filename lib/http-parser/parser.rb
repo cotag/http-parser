@@ -160,7 +160,7 @@ module HttpParser
         #
         def parse(inst, data)
             ::HttpParser.http_parser_execute(inst, @settings, data, data.length)
-            return !inst.error?
+            return inst.error?
         end
 
 
