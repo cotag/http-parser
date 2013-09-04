@@ -184,12 +184,12 @@ module HttpParser
         protected
 
 
-        class Callback < Proc
+        class Callback < ::FFI::Function
             #
             # Creates a new Parser callback.
             #
             def self.new(&block)
-                super do |parser|
+                super(:int, [::HttpParser::Instance.ptr]) do |parser|
                     begin
                         catch(:return) { yield(parser); 0 }
                     rescue
@@ -199,9 +199,9 @@ module HttpParser
             end
         end
 
-        class DataCallback < Proc
+        class DataCallback < ::FFI::Function
             def self.new(&block)
-                super do |parser, buffer, length|
+                super(:int, [::HttpParser::Instance.ptr, :pointer, :size_t]) do |parser, buffer, length|
                     begin
                         data = buffer.get_bytes(0, length)
                         catch(:return) { yield(parser, data); 0 }
