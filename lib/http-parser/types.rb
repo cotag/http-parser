@@ -113,7 +113,6 @@ module HttpParser
         def reset!(new_type = type)
             ::HttpParser.http_parser_init(self, new_type)
         end
-        alias reset reset!
 
         #
         # The type of the parser.

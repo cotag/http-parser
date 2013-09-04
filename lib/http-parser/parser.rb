@@ -14,6 +14,7 @@ module HttpParser
         #
         def initialize
             @settings = ::HttpParser::Settings.new
+            @callbacks = {} # so GC doesn't clean them up on java
             yield self if block_given?
         end
 
@@ -27,7 +28,9 @@ module HttpParser
         #   The state so far of the request / response being processed.
         #
         def on_message_begin(&block)
-            @settings[:on_message_begin] = Callback.new(&block)
+            cb = Callback.new(&block)
+            @callbacks[:on_message_begin] = cb
+            @settings[:on_message_begin] = cb
         end
 
         #
@@ -46,7 +49,9 @@ module HttpParser
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_url(&block)
-            @settings[:on_url] = DataCallback.new(&block)
+            cb = DataCallback.new(&block)
+            @callbacks[:on_url] = cb
+            @settings[:on_url] = cb
         end
 
         #
@@ -59,7 +64,9 @@ module HttpParser
         #   The state so far of the request / response being processed.
         #
         def on_status_complete(&block)
-            @settings[:on_status_complete] = Callback.new(&block)
+            cb = Callback.new(&block)
+            @callbacks[:on_status_complete] = cb
+            @settings[:on_status_complete] = cb
         end
 
         #
@@ -78,7 +85,9 @@ module HttpParser
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_header_field(&block)
-            @settings[:on_header_field] = DataCallback.new(&block)
+            cb = DataCallback.new(&block)
+            @callbacks[:on_header_field] = cb
+            @settings[:on_header_field] = cb
         end
 
         #
@@ -97,7 +106,9 @@ module HttpParser
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_header_value(&block)
-            @settings[:on_header_value] = DataCallback.new(&block)
+            cb = DataCallback.new(&block)
+            @callbacks[:on_header_value] = cb
+            @settings[:on_header_value] = cb
         end
 
         #
@@ -110,7 +121,9 @@ module HttpParser
         #   The state so far of the request / response being processed.
         #
         def on_headers_complete(&block)
-            @settings[:on_headers_complete] = Callback.new(&block)
+            cb = Callback.new(&block)
+            @callbacks[:on_headers_complete] = cb
+            @settings[:on_headers_complete] = cb
         end
 
         #
@@ -130,7 +143,9 @@ module HttpParser
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_body(&block)
-            @settings[:on_body] = DataCallback.new(&block)
+            cb = DataCallback.new(&block)
+            @callbacks[:on_body] = cb
+            @settings[:on_body] = cb
         end
 
         #
@@ -143,7 +158,9 @@ module HttpParser
         #   The state so far of the request / response being processed.
         #
         def on_message_complete(&block)
-            @settings[:on_message_complete] = Callback.new(&block)
+            cb = Callback.new(&block)
+            @callbacks[:on_message_complete] = cb
+            @settings[:on_message_complete] = cb
         end
 
         #
