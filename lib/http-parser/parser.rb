@@ -1,6 +1,8 @@
 
 module HttpParser
     class Parser
+        CALLBACKS = [:on_message_begin, :on_url, :on_status_complete, :on_header_field, :on_header_value, :on_headers_complete, :on_body, :on_message_complete]
+
         #
         # Returns a new request/response instance variable
         #
@@ -12,9 +14,16 @@ module HttpParser
         #
         # Initializes the Parser instance.
         #
-        def initialize
+        def initialize(callback_obj = nil)
             @settings = ::HttpParser::Settings.new
             @callbacks = {} # so GC doesn't clean them up on java
+
+            if not callback_obj.nil?
+                CALLBACKS.each do |callback|
+                    self.__send__(callback, &callback_obj.method(callback)) if callback_obj.respond_to? callback
+                end
+            end
+
             yield self if block_given?
         end
 

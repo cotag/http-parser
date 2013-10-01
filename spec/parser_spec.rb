@@ -284,5 +284,30 @@ describe HttpParser::Parser, "#initialize" do
             @begun.should == 2
         end
     end
+
+    describe "method based instead of block based" do
+        class SomeParserClass
+            attr_reader :url
+
+            def on_url(inst, data)
+                @url = data
+            end
+        end
+
+        let(:expected) { '/foo?q=1' }
+
+        it "should simplify the process" do
+            callbacks = SomeParserClass.new
+            parser = described_class.new(callbacks)
+
+            parser.parse @inst, "GET "
+
+            callbacks.url.should be_nil
+
+            parser.parse @inst, "#{expected} HTTP/1.1"
+
+            callbacks.url.should == expected
+        end
+    end
 end
 
