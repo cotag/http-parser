@@ -33,7 +33,7 @@ module HttpParser
         # @yield [instance]
         #   The given block will be called when the HTTP message begins.
         #
-        # @yieldparam [Paceman::HttpParser::Instance] instance
+        # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
         def on_message_begin(&block)
@@ -49,7 +49,7 @@ module HttpParser
         #   The given block will be called when the Request URI is recognized
         #   within the Request-Line.
         #
-        # @yieldparam [Paceman::HttpParser::Instance] instance
+        # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
         # @yieldparam [String] url
@@ -69,7 +69,7 @@ module HttpParser
         # @yield [instance]
         #   The given block will be called when the status is recognized.
         #
-        # @yieldparam [Paceman::HttpParser::Instance] instance
+        # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
         def on_status_complete(&block)
@@ -85,7 +85,7 @@ module HttpParser
         #   The given block will be called when a Header name is recognized
         #   in the Headers.
         #
-        # @yieldparam [Paceman::HttpParser::Instance] instance
+        # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
         # @yieldparam [String] field
@@ -106,7 +106,7 @@ module HttpParser
         #   The given block will be called when a Header value is recognized
         #   in the Headers.
         #
-        # @yieldparam [Paceman::HttpParser::Instance] instance
+        # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
         # @yieldparam [String] value
@@ -126,7 +126,7 @@ module HttpParser
         # @yield [instance]
         #   The given block will be called when the Headers stop.
         #
-        # @yieldparam [Paceman::HttpParser::Instance] instance
+        # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
         def on_headers_complete(&block)
@@ -142,7 +142,7 @@ module HttpParser
         #   The given block will be called when the body is recognized in the
         #   message body.
         #
-        # @yieldparam [Paceman::HttpParser::Instance] instance
+        # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
         # @yieldparam [String] body
@@ -163,7 +163,7 @@ module HttpParser
         # @yield [instance]
         #   The given block will be called when the message completes.
         #
-        # @yieldparam [Paceman::HttpParser::Instance] instance
+        # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
         def on_message_complete(&block)
@@ -175,7 +175,7 @@ module HttpParser
         #
         # Parses data.
         #
-        # @param [Paceman::HttpParser::Instance] inst
+        # @param [HttpParser::Instance] inst
         #   The state so far of the request / response being processed.
         #
         # @param [String] data
