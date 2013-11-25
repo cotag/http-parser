@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - "1.9.3"
   - "2.0.0"
-  - rbx-19mode   # Rubinius in 1.9 mode
-  - rbx-20mode
+  - ruby-head
+  - rbx-2.2.1
   - jruby-19mode # JRuby in 1.9 mode
   - jruby-20mode
