@@ -1,23 +1,13 @@
 require 'http-parser'
 
 describe ::HttpParser::Instance, "#initialize" do
-    context "when initialized from a pointer" do
-        it "should not call http_parser_init" do
-            ptr = described_class.new.to_ptr
-
-            ::HttpParser.should_not_receive(:http_parser_init)
-
-            described_class.new(ptr)
-        end
-    end
-
     context "when given a block" do
         it "should yield the new Instance" do
             expected = nil
 
             described_class.new { |inst| expected = inst }
 
-            expected.should be_kind_of(described_class)
+            expect(expected).to be_kind_of(described_class)
         end
 
         it "should allow changing the parser type" do
@@ -25,25 +15,25 @@ describe ::HttpParser::Instance, "#initialize" do
                 inst.type = :request
             end
 
-            inst.type.should == :request
+            expect(inst.type).to eq(:request)
         end
     end
 
     describe "#type" do
         it "should default to :both" do
-            subject.type.should == :both
+            expect(subject.type).to eq(:both)
         end
 
         it "should convert the type to a Symbol" do
             subject[:type_flags] = ::HttpParser::TYPES[:request]
 
-            subject.type.should == :request
+            expect(subject.type).to eq(:request)
         end
 
         it "should extract the type from the type_flags field" do
             subject[:type_flags] = ((0xff & ~0x3) | ::HttpParser::TYPES[:response])
 
-            subject.type.should == :response
+            expect(subject.type).to eq(:response)
         end
     end
 
@@ -51,7 +41,7 @@ describe ::HttpParser::Instance, "#initialize" do
         it "should set the type" do
             subject.type = :response
 
-            subject.type.should == :response
+            expect(subject.type).to eq(:response)
         end
 
         it "should not change flags" do
@@ -60,29 +50,19 @@ describe ::HttpParser::Instance, "#initialize" do
 
             subject.type = :request
 
-            subject[:type_flags].should == (flags | ::HttpParser::TYPES[:request])
+            expect(subject[:type_flags]).to eq((flags | ::HttpParser::TYPES[:request]))
         end
     end
 
     describe "#stop!" do
         it "should throw :return, 1" do
-            lambda { subject.stop! }.should throw_symbol(:return,1)
+            expect { subject.stop! }.to throw_symbol(:return,1)
         end
     end
 
     describe "#error!" do
         it "should throw :return, -1" do
-            lambda { subject.error! }.should throw_symbol(:return,-1)
-        end
-    end
-
-    describe "#reset!" do
-        it "should call http_parser_init" do
-            inst = described_class.new
-
-            ::HttpParser.should_receive(:http_parser_init)
-
-            inst.reset!
+            expect { subject.error! }.to throw_symbol(:return,-1)
         end
     end
 
@@ -92,7 +72,7 @@ describe ::HttpParser::Instance, "#initialize" do
         end
 
         inst.reset!
-        inst.type.should == :request
+        expect(inst.type).to eq(:request)
     end
 end
 

@@ -1,7 +1,7 @@
 
 module HttpParser
     class Parser
-        CALLBACKS = [:on_message_begin, :on_url, :on_status_complete, :on_header_field, :on_header_value, :on_headers_complete, :on_body, :on_message_complete]
+        CALLBACKS = [:on_message_begin, :on_url, :on_status, :on_header_field, :on_header_value, :on_headers_complete, :on_body, :on_message_complete]
 
         #
         # Returns a new request/response instance variable
@@ -72,10 +72,10 @@ module HttpParser
         # @yieldparam [HttpParser::Instance] instance
         #   The state so far of the request / response being processed.
         #
-        def on_status_complete(&block)
-            cb = Callback.new(&block)
-            @callbacks[:on_status_complete] = cb
-            @settings[:on_status_complete] = cb
+        def on_status(&block)
+            cb = DataCallback.new(&block)
+            @callbacks[:on_status] = cb
+            @settings[:on_status] = cb
         end
 
         #

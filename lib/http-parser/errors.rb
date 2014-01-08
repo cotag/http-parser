@@ -36,13 +36,13 @@ module HttpParser
         :OK => Error::OK,
 
         :CB_message_begin => Error::CALLBACK,
-        :CB_status_complete => Error::CALLBACK,
         :CB_url => Error::CALLBACK,
         :CB_header_field => Error::CALLBACK,
         :CB_header_value => Error::CALLBACK,
         :CB_headers_complete => Error::CALLBACK,
         :CB_body => Error::CALLBACK,
         :CB_message_complete => Error::CALLBACK,
+        :CB_status => Error::CALLBACK,
 
         :INVALID_EOF_STATE => Error::INVALID_EOF_STATE,
         :HEADER_OVERFLOW => Error::HEADER_OVERFLOW,
