@@ -43,6 +43,8 @@ module HttpParser
         :CB_body => Error::CALLBACK,
         :CB_message_complete => Error::CALLBACK,
         :CB_status => Error::CALLBACK,
+        :CB_chunk_header => Error::CALLBACK,
+        :CB_chunk_complete => Error::CALLBACK,
 
         :INVALID_EOF_STATE => Error::INVALID_EOF_STATE,
         :HEADER_OVERFLOW => Error::HEADER_OVERFLOW,

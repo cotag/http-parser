@@ -14,9 +14,10 @@ module HttpParser
         :CHUNKED => 1 << 2,
         :CONNECTION_KEEP_ALIVE => 1 << 3,
         :CONNECTION_CLOSE => 1 << 4,
-        :TRAILING => 1 << 5,
-        :UPGRADE => 1 << 6,
-        :SKIPBODY => 1 << 7
+        :CONNECTION_UPGRADE => 1 << 5,
+        :TRAILING => 1 << 6,
+        :UPGRADE => 1 << 7,
+        :SKIPBODY => 1 << 8
     }
 
     #
@@ -41,6 +42,10 @@ module HttpParser
         :PROPPATCH,
         :SEARCH,
         :UNLOCK,
+        :BIND,
+        :REBIND,
+        :UNBIND,
+        :ACL,
         # subversion
         :REPORT,
         :MKACTIVITY,
@@ -53,7 +58,9 @@ module HttpParser
         :UNSUBSCRIBE,
         # RFC-5789
         :PATCH,
-        :PURGE
+        :PURGE,
+        # CalDAV
+        :MKCALENDAR
     ]
 
 
@@ -79,7 +86,7 @@ module HttpParser
                 :index,          :uchar,
 
                 :nread,          :uint32,
-                :content_length, :int64,
+                :content_length, :uint64,
 
                 # READ-ONLY
                 :http_major,     :ushort,
@@ -299,13 +306,13 @@ module HttpParser
                 :on_header_value,     :http_data_cb,
                 :on_headers_complete, :http_cb,
                 :on_body,             :http_data_cb,
-                :on_message_complete, :http_cb
+                :on_message_complete, :http_cb,
+                :on_chunk_header,     :http_cb,
+                :on_chunk_complete,   :http_cb
     end
 
 
-    attach_function :http_parser_init, [Instance.by_ref, :http_parser_type], :void, :blocking => true
-    attach_function :http_parser_execute, [Instance.by_ref, Settings.by_ref, :pointer, :size_t], :size_t, :blocking => true
-
-    attach_function :http_should_keep_alive, [Instance.by_ref], :int, :blocking => true
-    attach_function :http_method_str, [:http_method], :string, :blocking => true
+    attach_function :http_parser_init, [Instance.by_ref, :http_parser_type], :void, blocking: true
+    attach_function :http_parser_execute, [Instance.by_ref, Settings.by_ref, :pointer, :size_t], :size_t, blocking: true
+    attach_function :http_should_keep_alive, [Instance.by_ref], :int, blocking: true
 end
