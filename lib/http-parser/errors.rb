@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module HttpParser
     class Error < StandardError
@@ -70,7 +71,7 @@ module HttpParser
         :UNKNOWN => Error::UNKNOWN
     }
 
-    attach_function :err_desc, :http_errno_description, [:int], :string, :blocking => true
-    attach_function :err_name, :http_errno_name, [:int], :string, :blocking => true
+    attach_function :err_desc, :http_errno_description, [:int], :string
+    attach_function :err_name, :http_errno_name, [:int], :string
 end
 

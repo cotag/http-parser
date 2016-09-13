@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module HttpParser
     HTTP_MAX_HEADER_SIZE = (80 * 1024)
@@ -312,7 +313,7 @@ module HttpParser
     end
 
 
-    attach_function :http_parser_init, [Instance.by_ref, :http_parser_type], :void, blocking: true
-    attach_function :http_parser_execute, [Instance.by_ref, Settings.by_ref, :pointer, :size_t], :size_t, blocking: true
-    attach_function :http_should_keep_alive, [Instance.by_ref], :int, blocking: true
+    attach_function :http_parser_init, [Instance.by_ref, :http_parser_type], :void
+    attach_function :http_parser_execute, [Instance.by_ref, Settings.by_ref, :pointer, :size_t], :size_t
+    attach_function :http_should_keep_alive, [Instance.by_ref], :int
 end

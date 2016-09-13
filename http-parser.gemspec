@@ -1,4 +1,6 @@
+# frozen_string_literal: true
 # -*- encoding: utf-8 -*-
+
 $:.push File.expand_path("../lib", __FILE__)
 require "http-parser/version"
 
@@ -16,11 +18,11 @@ Gem::Specification.new do |s|
   EOF
 
 
-  s.add_dependency 'ffi-compiler', '>= 0.0.2'
-  s.add_dependency 'rake'
+  s.add_dependency 'ffi-compiler', '>= 1.0', '< 2.0'
 
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'yard'
+  s.add_development_dependency 'rake',  '~> 11.2'
+  s.add_development_dependency 'rspec', '~> 3.5'
+  s.add_development_dependency 'yard',  '~> 0.9'
   
 
   s.files = Dir["{lib}/**/*"] + %w(Rakefile http-parser.gemspec README.md LICENSE)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "ffi"       # Bindings to C libraries
 
 require "http-parser/ext"       # Loads http-parser ext
