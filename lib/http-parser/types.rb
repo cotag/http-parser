@@ -61,7 +61,10 @@ module HttpParser
         :PATCH,
         :PURGE,
         # CalDAV
-        :MKCALENDAR
+        :MKCALENDAR,
+        # RFC-2068, section 19.6.1.2
+        :LINK,
+        :UNLINK
     ]
 
 
@@ -269,6 +272,16 @@ module HttpParser
         end
 
         #
+        # Determines if a chunked response has completed
+        #
+        # @return [Boolean]
+        #   Specifies whether the chunked response has completed
+        #
+        def final_chunk?
+            ::HttpParser.http_body_is_final(self) > 0
+        end
+
+        #
         # Halts the parser if called in a callback
         #
         def stop!
@@ -316,4 +329,7 @@ module HttpParser
     attach_function :http_parser_init, [Instance.by_ref, :http_parser_type], :void
     attach_function :http_parser_execute, [Instance.by_ref, Settings.by_ref, :pointer, :size_t], :size_t
     attach_function :http_should_keep_alive, [Instance.by_ref], :int
+
+    # Checks if this is the final chunk of the body
+    attach_function :http_body_is_final, [Instance.by_ref], :int
 end
