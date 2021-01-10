@@ -18,12 +18,12 @@ Gem::Specification.new do |s|
   EOF
 
 
-  s.add_dependency 'ffi-compiler', '>= 1.13.1', '< 2.0'
+  s.add_dependency 'ffi-compiler', '>= 1.0', '< 2.0'
 
   s.add_development_dependency 'rake',  '~> 11.2'
   s.add_development_dependency 'rspec', '~> 3.5'
   s.add_development_dependency 'yard',  '~> 0.9'
-
+  
 
   s.files = Dir["{lib}/**/*"] + %w(Rakefile http-parser.gemspec README.md LICENSE)
   s.files += ["ext/http-parser/http_parser.c", "ext/http-parser/http_parser.h"]
